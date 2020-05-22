@@ -1,111 +1,97 @@
 var {modelName} = require({modelPath});
-
+const mongoose = require('mongoose');
 /**
  * {controllerName}.js
  *
  * @description :: Server-side logic for managing {pluralName}.
  */
-module.exports = {
+var ObjectId = mongoose.Types.ObjectId;
+var collection = {};
 
-    /**
-     * {controllerName}.list()
-     */
-    list: function (req, res) {
+/**
+ * {controllerName}.list()
+ */
+collection.get = function() {
+    return new Promise((resolve,reject) => {
         {modelName}.find(function (err, {pluralName}) {
-            if (err) {
-                return res.status(500).json({
-                    message: 'Error when getting {name}.',
-                    error: err
-                });
+            if(err){
+                return reject(err);
             }
-            return res.json({pluralName});
+            resolve({pluralName});
         });
-    },
+    });
+};
 
-    /**
-     * {controllerName}.show()
-     */
-    show: function (req, res) {
-        var id = req.params.id;
-        {modelName}.findOne({_id: id}, function (err, {name}) {
-            if (err) {
-                return res.status(500).json({
-                    message: 'Error when getting {name}.',
-                    error: err
-                });
+/**
+ * {controllerName}.getOne()
+ */
+collection.getOne = function({name}_id) {
+    return new Promise((resolve,reject) => {
+        {modelName}.findOne({_id:ObjectId({name}_id)}, function(err, {name}) {
+            if(err){
+                return reject(err);
             }
-            if (!{name}) {
-                return res.status(404).json({
-                    message: 'No such {name}'
-                });
+            if(!{name}){
+                return reject("No matching {name} exists");
             }
-            return res.json({name});
+            resolve({name});
         });
-    },
+    });
+};
 
-    /**
-     * {controllerName}.create()
-     */
-    create: function (req, res) {
+/**
+ * {controllerName}.create()
+ */
+collection.create = function ({name}_obj) {
+    return new Promise((resolve,reject) => {
         var {name} = new {modelName}({{createFields}
         });
 
         {name}.save(function (err, {name}) {
             if (err) {
-                return res.status(500).json({
-                    message: 'Error when creating {name}',
-                    error: err
-                });
+                return reject(err);
             }
-            return res.status(201).json({name});
+            resolve({name});
         });
-    },
+    });
+};
 
-    /**
-     * {controllerName}.update()
-     */
-    update: function (req, res) {
-        var id = req.params.id;
-        {modelName}.findOne({_id: id}, function (err, {name}) {
+/**
+ * {controllerName}.update()
+ */
+collection.update = function ({name}_obj) {
+    return new Promise((resolve,reject) => {
+        {modelName}.findOne({_id: ObjectId({name}_obj.id)}, function (err, {name}) {
             if (err) {
-                return res.status(500).json({
-                    message: 'Error when getting {name}',
-                    error: err
-                });
+                return reject(err);
             }
             if (!{name}) {
-                return res.status(404).json({
-                    message: 'No such {name}'
-                });
+                return reject("No matching {name} exists");
             }
 
             {updateFields}
             {name}.save(function (err, {name}) {
                 if (err) {
-                    return res.status(500).json({
-                        message: 'Error when updating {name}.',
-                        error: err
-                    });
+                    return reject(err);
                 }
-
-                return res.json({name});
+                resolve({name});
             });
         });
-    },
-
-    /**
-     * {controllerName}.remove()
-     */
-    remove: function (req, res) {
-        var id = req.params.id;
-        {modelName}.findByIdAndRemove(id, function (err, {name}) {
-            if (err) {
-                return res.status(500).json({
-                    message: 'Error when deleting the {name}.',
-                    error: err
-                });
-            }
-            return res.status(204).json();
-        });
-    }
+    });
 };
+
+/**
+ * {controllerName}.remove()
+ */
+collection.remove = function ({name}_id) {
+    return new Promise((resolve,reject) => {
+        {modelName}.findByIdAndRemove(ObjectId({name}_id), function (err, {name}) {
+            if (err) {
+                return reject(err);
+            }
+            resolve();
+        });
+    });
+};
+
+module.exports = collection;
