@@ -1,5 +1,7 @@
 var {modelName} = require({modelPath});
 const mongoose = require('mongoose');
+const {hasKeyNonEmpty} = require('<filename>');
+
 /**
  * {controllerName}.js
  *
@@ -7,6 +9,15 @@ const mongoose = require('mongoose');
  */
 var ObjectId = mongoose.Types.ObjectId;
 var collection = {};
+
+/**
+ * Filter attributes are only take the passed ones
+ */
+function filterAttributes(data){
+    let filtered_data = {};
+    {conditionalFilter}
+    return filtered_data;
+}
 
 /**
  * {controllerName}.list()
@@ -44,8 +55,10 @@ collection.getOne = function({name}_id) {
  */
 collection.create = function ({name}_obj) {
     return new Promise((resolve,reject) => {
-        var {name} = new {modelName}({{createFields}
-        });
+
+        var filteredData = filterAttributes({name}_obj);
+        
+        var {name} = new {modelName}(filteredData);
 
         {name}.save(function (err, {name}) {
             if (err) {
@@ -64,9 +77,7 @@ collection.createMany = function ({pluralName}_data) {
         
         let {pluralName}_arr = [];
         {pluralName}_data.forEach(element => {
-            {pluralName}_arr.push({
-            {insertManyFields}
-            });
+            {pluralName}_arr.push(filterAttributes(element));
         });
         {modelName}.insertMany({pluralName}_arr, function(err, {pluralName}){
             if(err){
