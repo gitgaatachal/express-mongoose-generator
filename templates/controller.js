@@ -57,6 +57,27 @@ collection.create = function ({name}_obj) {
 };
 
 /**
+ * {controllerName}.createMany()
+ */
+collection.createMany = function ({pluralName}_data) {
+    return new Promise((resolve,reject) => {
+        
+        let {pluralName}_arr = [];
+        {pluralName}_data.forEach(element => {
+            {pluralName}_arr.push({
+            {insertManyFields}
+            });
+        });
+        {modelName}.insertMany({pluralName}_arr, function(err, {pluralName}){
+            if(err){
+                return reject(err);
+            }
+            resolve({pluralName});
+        });
+    });
+};
+
+/**
  * {controllerName}.update()
  */
 collection.update = function ({name}_obj) {
@@ -94,4 +115,19 @@ collection.remove = function ({name}_id) {
     });
 };
 
+/**
+ * {controllerName}.removeMany()
+ */
+collection.removeMany = function ({pluralName}_ids) {
+    return new Promise((resolve,reject) => {
+        {modelName}.remove({_id:{$in:{pluralName}_ids.map(id => ObjectId(id))}}, (err, result) => {
+            if(err){
+                return reject(err);
+            }
+            resolve(result);
+        });
+    });
+};
+
 module.exports = collection;
+
