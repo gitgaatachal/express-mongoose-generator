@@ -11,7 +11,7 @@ var ObjectId = mongoose.Types.ObjectId;
 var collection = {};
 
 /**
- * Filter attributes are only take the passed ones
+ * Filter attributes and only take the relevant ones
  */
 function filterAttributes(data){
     let filtered_data = {};
